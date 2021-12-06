@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState, useEffect } from "react"
 import { DataGrid } from "@material-ui/data-grid"
 
 function loadServerRows(page, data, rowsPerPage) {
@@ -127,10 +127,10 @@ export default function ServerPaginationGrid() {
     },
   ]
 
-  const [page, setPage] = React.useState(1)
-  const [rows, setRows] = React.useState([])
-  const [loading, setLoading] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [page, setPage] = useState(1)
+  const [rows, setRows] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
 
   const handlePageChange = (params) => {
     setPage(params + 1)
@@ -138,7 +138,7 @@ export default function ServerPaginationGrid() {
   const handleChangeRowsPerPage = (num) => {
     setRowsPerPage(num)
   }
-  React.useEffect(() => {
+  useEffect(() => {
     const func = async () => {
       setLoading(true)
       const newRows = await loadServerRows(page, data, rowsPerPage)
@@ -147,11 +147,10 @@ export default function ServerPaginationGrid() {
     }
     func()
   }, [page, rowsPerPage])
-  console.log(rows)
   return (
     <div style={{ height: 800, width: "100%" }}>
       <DataGrid
-        pageSize={10}
+        pageSize={rowsPerPage}
         rows={rows}
         columns={columns}
         getRowId={(row) => row._id}
